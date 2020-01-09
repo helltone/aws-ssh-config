@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import argparse
 import re
@@ -136,7 +135,6 @@ def main():
                         if args.default_user is None:
                             image_label = image.name if image is not None else instance.image_id
                             sys.stderr.write('Can\'t lookup user for AMI \'' + image_label + '\', add a rule to the script\n')
-
     for k in sorted(instances):
         for instance in instances[k]:
             if args.private:
@@ -150,9 +148,12 @@ def main():
                 else:
                     sys.stderr.write('Cannot lookup ip address for instance %s, skipped it.' % instance.id)
                     continue
-
+            for tag in instance.tags.items():
+                if tag[0] == 'Name':
+                    humanname = tag[1]
+                else:
+                    continue
             instance_id = generate_id(instance, args.tags, args.region)
-
             if counts_total[instance_id] != 1:
                 counts_incremental[instance_id] += 1
                 instance_id += '-' + str(counts_incremental[instance_id])
@@ -162,8 +163,8 @@ def main():
 
             if instance.id:
                 print('# id: ' + instance.id)
-            print('Host ' + hostid)
-            print('    HostName ' + ip_addr)
+            print('Host ' + humanname)
+            print('    HostName ' + humanname)
 
             try:
                 if amis[instance.image_id] is not None:
@@ -195,3 +196,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
