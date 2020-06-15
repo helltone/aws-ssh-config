@@ -178,11 +178,11 @@ def main():
                 keydir = '~/.ssh/'
 
             if args.ssh_key_name:
-                print('    IdentityFile ' + keydir + args.ssh_key_name + '.pem')
+                print('    IdentityFile ' + keydir + args.ssh_key_name )
             else:
                 key_name = AMI_IDS_TO_KEY.get(instance.image_id, instance.key_name)
 
-                print('    IdentityFile ' + keydir + key_name.replace(' ', '_') + '.pem')
+                print('    IdentityFile ' + keydir + key_name.replace(' ', '_') )
 
             if not args.no_identities_only:
                 # ensure ssh-agent keys don't flood when we know the right file to use
